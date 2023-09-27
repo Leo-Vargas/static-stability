@@ -379,7 +379,10 @@ def ReducedJacobian(jacobian: np.ndarray):
     return reducedJacobian
 
 def is_symmetric(a, rtol=1e-05, atol=1e-08):
-    return np.allclose(a, a.T, rtol=rtol, atol=atol)
+    if np.allclose(a, a.T, rtol=rtol, atol=atol) == True:
+        print('ok')
+    else:
+        print('not ok')
 
 def checkEquality(a, b, rtol=1e-05, atol=1e-08):
     if np.allclose(a, b, rtol=rtol, atol=atol) == True:
@@ -392,3 +395,39 @@ def checkSensitivity(reducedJacobian: np.ndarray):
     
     for i in range(len(sensitivity)):
         print(sensitivity[i])
+
+# ---------------------- YBUS --------------------
+def makeYbus(linedata: np.ndarray):
+    nl = np.array(linedata[:, 0], dtype=int)
+    nr = np.array(linedata[:, 1], dtype=int)
+    R = np.array(linedata[:, 2], dtype=complex)
+    X = np.array(linedata[:, 3], dtype=complex)
+    Bc = np.array(1j*linedata[:, 4], dtype=complex)
+    a = np.array(linedata[:, 5])
+
+    nbr = len(nl)
+    nbus = np.max([np.max(nl), np.max(nr)])
+    Z = R + X*1j
+
+    y = np.divide(np.ones(nbr), Z)
+
+    Ybus=np.zeros((int(nbus), int(nbus)), dtype=complex)
+
+    for i in range(nbr):
+        if a[i] <= 0:
+            a[i] = 1
+        
+        nl[i]-=1
+        nr[i]-=1
+
+        Ybus[nl[i], nr[i]] = Ybus[nl[i], nr[i]] - y[i]/a[i]
+        Ybus[nr[i], nl[i]] = Ybus[nl[i], nr[i]]
+
+    for n in range(nbus):
+        for k in range(nbr):
+            if nl[k] == n:
+                Ybus[n, n] = Ybus[n, n]+y[k]/(a[k]**2) + Bc[k]
+            elif nr[k] == n:
+                Ybus[n, n] = Ybus[n, n] + y[k] + Bc[k]
+
+    return Ybus
