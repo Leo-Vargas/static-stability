@@ -351,7 +351,7 @@ def hSetup(gridTopology: dict, angle, voltage):
     
     for i in range((len(gridTopology)*2)-2):
         if i < len(gridTopology)-1:
-            hValues[i]=angle[i]
+            hValues[i]=angle[i]*math.pi/180
             hDataDict.update({'a'+str(gridTopology[i+1]): StateData(0, i, gridTopology[i+1])})
         else:
             hValues[i]=voltage[i-(len(gridTopology)-1)]

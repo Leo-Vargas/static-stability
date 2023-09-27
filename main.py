@@ -128,10 +128,11 @@ evalues, evectors = linalg.eig(reducedJacobian)
 
 evectorsInv = linalg.inv(evectors)
 evaluesMatrix = np.diag(evalues)
-#print(evalues)
-#print(evectors@D@evectorsInv)
+print(evalues)
+print('----------------barreira ------------------')
+
 
 P, D, Q = np.linalg.svd(reducedJacobian, full_matrices=False)
 print('----------------barreira ------------------')
-print(D)
+#print(D)
 
