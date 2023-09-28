@@ -2,40 +2,41 @@ import numpy as np
 from scipy import linalg
 import csv
 from classes import Measurement, StateData
-from functions import JacobianCalculator, hSetup, ReducedJacobian, is_symmetric, checkSensitivity, checkEquality, makeYbus
+from functions import hSetup, is_symmetric, checkSensitivity, checkEquality, makeYbus
+from JacobianCalculator import JacobianCalculator, ReducedJacobian
 
 # --------------- entry data ---------------
 measurementDict = {
-    'p1': Measurement(0, (1,), 0),
-    'p2': Measurement(0, (2,), 1),
-    'p3': Measurement(0, (3,), 1),
-    'p4': Measurement(0, (4,), 2),
-    'p5': Measurement(0, (5,), 2),
-    'p6': Measurement(0, (6,), 2),
-    'p7': Measurement(0, (7,), 2),
-    'p8': Measurement(0, (8,), 2),
-    'p9': Measurement(0, (9,), 2),
-    'p10': Measurement(0, (10,), 2),
-    'p11': Measurement(0, (11,), 2),
-    'p12': Measurement(0, (12,), 2),
-    'p13': Measurement(0, (13,), 2),
-    'p14': Measurement(0, (14,), 2),
-    'q1': Measurement(1, (1,), 0),
-    'q2': Measurement(1, (2,), 1),
-    'q3': Measurement(1, (3,), 1),
-    'q4': Measurement(1, (4,), 2),
-    'q5': Measurement(1, (5,), 2),
-    'q6': Measurement(1, (6,), 2),
-    'q7': Measurement(1, (7,), 2),
-    'q8': Measurement(1, (8,), 2),
-    'q9': Measurement(1, (9,), 2),
-    'q10': Measurement(0, (10,), 2),
-    'q11': Measurement(0, (11,), 2),
-    'q12': Measurement(0, (12,), 2),
-    'q13': Measurement(0, (13,), 2),
-    'q14': Measurement(0, (14,), 2),
+    'p1': Measurement(0, 1, 0),
+    'p2': Measurement(0, 2, 1),
+    'p3': Measurement(0, 3, 1),
+    'p4': Measurement(0, 4, 2),
+    'p5': Measurement(0, 5, 2),
+    'p6': Measurement(0, 6, 1),
+    'p7': Measurement(0, 7, 2),
+    'p8': Measurement(0, 8, 1),
+    'p9': Measurement(0, 9, 2),
+    'p10': Measurement(0, 10, 2),
+    'p11': Measurement(0, 11, 2),
+    'p12': Measurement(0, 12, 2),
+    'p13': Measurement(0, 13, 2),
+    'p14': Measurement(0, 14, 2),
+    'q1': Measurement(1, 1, 0),
+    'q2': Measurement(1, 2, 1),
+    'q3': Measurement(1, 3, 1),
+    'q4': Measurement(1, 4, 2),
+    'q5': Measurement(1, 5, 2),
+    'q6': Measurement(1, 6, 1),
+    'q7': Measurement(1, 7, 2),
+    'q8': Measurement(1, 8, 1),
+    'q9': Measurement(1, 9, 2),
+    'q10': Measurement(1, 10, 2),
+    'q11': Measurement(1, 11, 2),
+    'q12': Measurement(1, 12, 2),
+    'q13': Measurement(1, 13, 2),
+    'q14': Measurement(1, 14, 2),
 }    
-gridTopology = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9])
+gridTopology = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14])
 
 linedata=np.array([
     (1,	2,	0.0193800000000000,	0.0591700000000000,	0.0264000000000000,	1),
@@ -62,13 +63,13 @@ linedata=np.array([
 
 
 
-#Ybus = makeYbus(linedata)
+Ybus = makeYbus(linedata)
 #print(Ybus)
 #print('\n')
 #is_symmetric(Ybus)
 
 
-""""
+
     
   
 voltage = np.array([ 1.06, 1.045, 1.010, 1.018, 1.020, 1.070, 1.062, 1.090, 1.056, 1.051, 1.057, 1.055, 1.050, 1.036])
@@ -99,7 +100,3 @@ evaluesMatrix = np.diag(evalues)
 #print(evalues)
 #print(evectors@D@evectorsInv)
 
-P, D, Q = np.linalg.svd(reducedJacobian, full_matrices=False)
-print('----------------barreira ------------------')
-print(D)
-"""
