@@ -80,10 +80,10 @@ angle = np.array([-0.0, -5.0, -12.7, -10.3, -8.8, -14.2, -13.4, -13.4, -14.9, -1
 # --------------- Calculations ---------------
 np.set_printoptions(precision=3)
 jacobian = JacobianCalculator(list(measurementDict.values()), hDataDict, Ybus, hValues, gridTopology)
-#print(jacobian)
+print(jacobian)
 #print('\n')
  
-reducedJacobian = ReducedJacobian(jacobian)
+#reducedJacobian = ReducedJacobian(jacobian)
 
 #checkSensitivity(reducedJacobian)
 #print(reducedJacobian)
@@ -93,10 +93,10 @@ reducedJacobian = ReducedJacobian(jacobian)
 
 
 
-evalues, evectors = linalg.eig(reducedJacobian)
+#evalues, evectors = linalg.eig(reducedJacobian)
 
-evectorsInv = linalg.inv(evectors)
-evaluesMatrix = np.diag(evalues)
+#evectorsInv = linalg.inv(evectors)
+#evaluesMatrix = np.diag(evalues)
 #print(evalues)
 #print(evectors@D@evectorsInv)
 

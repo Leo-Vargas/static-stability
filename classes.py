@@ -38,7 +38,8 @@ class busTypes:
     
     def __init__(self, count=0):
         self.count = count
-        self.buses= []
+        self.buses = []
         
-    def addBus(self, value):
-        self.buses.append(value)
+    def addBus(self, bus: int):
+        self.count+=1
+        self.buses.append(bus)
