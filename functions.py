@@ -117,6 +117,6 @@ def printBusParticipation(busParticipation):
 
     for i in range(np.shape(busParticipation)[0]):
         print('')
-        print(f'Modo {i}:', end=' ')
+        print(f'Modo {i+1}:', end=' ')
         for j in range(np.shape(busParticipation)[1]):
             print(f'{busParticipation[j,i]}', end=' ')
