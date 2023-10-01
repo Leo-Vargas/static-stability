@@ -2,7 +2,7 @@ import numpy as np
 from scipy import linalg
 import csv
 from classes import Measurement, StateData
-from functions import hSetup, is_symmetric, checkSensitivity, checkEquality, makeYbus
+from functions import hSetup, is_symmetric, checkSensitivity, checkEquality, makeYbus, makeBusConfiguration, calcBusParticipation, printBusParticipation
 from JacobianCalculator import JacobianCalculator, ReducedJacobian
 
 # --------------- entry data ---------------
@@ -62,15 +62,12 @@ linedata=np.array([
 ])
 
 
-
 Ybus = makeYbus(linedata)
 #print(Ybus)
 #print('\n')
 #is_symmetric(Ybus)
 
-
-
-    
+busConfiguration = makeBusConfiguration(measurementDict)
   
 voltage = np.array([ 1.06, 1.045, 1.010, 1.018, 1.020, 1.070, 1.062, 1.090, 1.056, 1.051, 1.057, 1.055, 1.050, 1.036])
 angle = np.array([-0.0, -5.0, -12.7, -10.3, -8.8, -14.2, -13.4, -13.4, -14.9, -15.1, -14.8, -15.1, -15.2, -16.])
@@ -79,11 +76,11 @@ angle = np.array([-0.0, -5.0, -12.7, -10.3, -8.8, -14.2, -13.4, -13.4, -14.9, -1
 
 # --------------- Calculations ---------------
 np.set_printoptions(precision=3)
-jacobian = JacobianCalculator(list(measurementDict.values()), hDataDict, Ybus, hValues, gridTopology)
-print(jacobian)
+jacobian = JacobianCalculator(list(measurementDict.values()), hDataDict, Ybus, hValues, gridTopology, busConfiguration)
+#print(jacobian)
 #print('\n')
  
-#reducedJacobian = ReducedJacobian(jacobian)
+reducedJacobian = ReducedJacobian(jacobian, busConfiguration)
 
 #checkSensitivity(reducedJacobian)
 #print(reducedJacobian)
@@ -93,10 +90,13 @@ print(jacobian)
 
 
 
-#evalues, evectors = linalg.eig(reducedJacobian)
+evalues, evectors = linalg.eig(reducedJacobian)
 
-#evectorsInv = linalg.inv(evectors)
-#evaluesMatrix = np.diag(evalues)
-#print(evalues)
-#print(evectors@D@evectorsInv)
+evectorsInv = linalg.inv(evectors)
+evaluesMatrix = np.diag(evalues)
+print(evalues)
+#print(evectors@evaluesMatrix@evectorsInv)
 
+
+busParticipation = calcBusParticipation(evectors, evectorsInv)
+printBusParticipation(busParticipation)

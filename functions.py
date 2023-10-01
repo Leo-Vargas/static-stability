@@ -1,7 +1,7 @@
 import numpy as np
 from scipy import linalg
 import math
-from classes import Measurement, StateData
+from classes import Measurement, StateData, busTypes
 
 
 # ----------------------- Data Processing Related Functions -----------------------------
@@ -81,3 +81,42 @@ def makeYbus(linedata: np.ndarray):
                 Ybus[n, n] = Ybus[n, n] + y[k] + Bc[k]
 
     return Ybus
+
+def makeBusConfiguration(measurementDict: dict):
+    busConfiguration = {
+        'slack': busTypes(),
+        'PV': busTypes(),
+        'PQ': busTypes() 
+    }
+    
+    for measurement in measurementDict.values():
+        if measurement.category == 0:
+            if measurement.busType == 0:
+                busConfiguration['slack'].addBus(measurement.bus)
+            elif measurement.busType == 1:
+                busConfiguration['PV'].addBus(measurement.bus)
+            elif measurement.busType == 2:
+                busConfiguration['PQ'].addBus(measurement.bus)
+        else:
+            return busConfiguration
+        
+
+
+# ------------------------ PARTICIPATION ---------------
+def calcBusParticipation(rightEvectors, leftEvectors):
+    busParticipation = np.zeros((np.shape(rightEvectors)[0], np.shape(rightEvectors)[1]))
+
+    for i in range(np.shape(rightEvectors)[0]):
+        for j in range(np.shape(rightEvectors)[1]):
+            busParticipation[i,j] = rightEvectors[i,j]*leftEvectors[j,i]
+    
+    return busParticipation
+
+
+def printBusParticipation(busParticipation):
+
+    for i in range(np.shape(busParticipation)[0]):
+        print('')
+        print(f'Modo {i}:', end=' ')
+        for j in range(np.shape(busParticipation)[1]):
+            print(f'{busParticipation[j,i]}', end=' ')
