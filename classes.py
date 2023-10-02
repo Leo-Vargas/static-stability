@@ -6,13 +6,18 @@ class Measurement:
         2: Active power Flow between bars(len(buses)=2)
         3: Reactive power Flow between bars(len(buses)=2)
         4: Voltage Level at bar(len(buses)=1)
-        5: Current Flow between bars(len(buses)=2)"""
+        5: Current Flow between bars(len(buses)=2)
+        
+    busTypes are mapped from 0 to 2 as:
+    0: Slack bus
+    1: PV bus
+    2: PQbus """
     
-    def __init__(self, category: int, bus: tuple, value: float):
+    def __init__(self, category: int, bus: int, busType: float):
         
         self.category = category
         self.bus = bus
-        self.value = value
+        self.busType = busType
     
 class StateData:
     """"Class for modelling and storing data from each state of the system state vector
@@ -28,3 +33,13 @@ class StateData:
         
     def addValue(self, value):
         self.value.append(value)
+        
+class busTypes:
+    
+    def __init__(self, count=0):
+        self.count = count
+        self.buses = []
+        
+    def addBus(self, bus: int):
+        self.count+=1
+        self.buses.append(bus)
